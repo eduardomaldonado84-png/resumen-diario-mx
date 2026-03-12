@@ -1,21 +1,27 @@
 name: Ejecucion Diaria Resumen
 on:
   schedule:
-    - cron: '0 14 * * *' # 8:00 AM hora CDMX (14:00 UTC)
-  workflow_dispatch: # Botón para probarlo manualmente
+    - cron: '0 14 * * *' 
+  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Forzamos el uso de Node 24 como recomienda el mensaje de error
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout del codigo
-        uses: actions/checkout@v3
-      - name: Instalar Python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4 # Versión actualizada
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5 # Versión actualizada
         with:
-          python-version: '3.9'
+          python-version: '3.11'
+
       - name: Instalar Librerias
         run: pip install requests
+
       - name: Correr Script
         env:
           BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
